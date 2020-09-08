@@ -1,8 +1,15 @@
 package com.study.first.controller;
 
+import com.study.first.entity.Student;
 import com.study.first.request.TestRequestVo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: YHC
@@ -37,9 +44,40 @@ public class TestController {
         return "two...";
     }
 
-    public String rabbitMQconsumer(){
+    @GetMapping("test")
+    public String testSomething(){
+    //反射测试
 
-        return "rabbitMQconsumer data : ";
+        Student student = new Student();
+        student.setId("100");
+        student.setCode("code");
+        student.setName("name");
+        student.setPass("pass");
+        student.setMark("mark");
+
+        Field[] fields = Student.class.getDeclaredFields();
+        Class objClass = Student.class;
+        List<Method> methodList = new ArrayList<>();
+
+        for (int j=0; j< fields.length; j++) {
+            String fieldName = fields[j].getName();
+            String getFildName = "get" + fieldName.substring(0, 1).toUpperCase()+fieldName.substring(1);
+            try {
+                Method method = objClass.getMethod(getFildName, new Class[]{});
+                methodList.add(method);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        Object value = "";
+        try {
+            value = methodList.get(2).invoke(student);
+            System.out.println("value: " + value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return value.toString();
     }
 
 }

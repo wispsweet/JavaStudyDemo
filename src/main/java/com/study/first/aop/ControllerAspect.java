@@ -1,6 +1,7 @@
 package com.study.first.aop;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
@@ -19,16 +20,20 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Component
 @Aspect
+@Slf4j
 public class ControllerAspect {
 
-    @Pointcut("execution(* com.study.first.controller..*.*(..))")
+    //排除DownloadController的所有方法
+    @Pointcut("execution(* com.study.first.controller..*.*(..)) && !execution(* com.study.first.controller.DownloadController.*(..))")
     public void controllerPointCut(){
 
     }
 
     @Before("controllerPointCut()")
     public void before(JoinPoint joinPoint){
-        System.out.println("beforeAop:");
+
+        log.warn("beforeAop:" + this.getClass().getName());
+
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
 

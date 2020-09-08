@@ -1,6 +1,7 @@
 package com.study.first.advice;
 
 import com.study.first.errorException.BusinessException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -20,6 +21,7 @@ import java.util.Set;
  * DESC:
  */
 @ControllerAdvice
+@Slf4j
 public class RequestControllerAdvice implements RequestBodyAdvice {
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -38,6 +40,8 @@ public class RequestControllerAdvice implements RequestBodyAdvice {
 
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+
+        log.warn(this.getClass().getSimpleName());
 
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         Set<ConstraintViolation<Object>> set = validator.validate(body, Default.class);

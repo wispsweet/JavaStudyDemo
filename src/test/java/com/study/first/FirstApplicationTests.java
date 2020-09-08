@@ -1,7 +1,9 @@
 package com.study.first;
 
+import com.study.first.controller.TestController;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.crypto.Cipher;
@@ -12,6 +14,9 @@ import java.util.Base64;
 class FirstApplicationTests {
 
     private static final String AES_PASSWORD_TOKEN = "1243453457976443";
+
+    @Autowired
+    private TestController testController;
 
     @Test
     void contextLoads() {
@@ -49,5 +54,10 @@ class FirstApplicationTests {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Test
+    public void controllerTest(){
+        testController.testSomething();
     }
 }
